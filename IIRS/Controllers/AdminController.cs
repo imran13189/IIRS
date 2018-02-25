@@ -7,11 +7,16 @@ using IIRS.Filters;
 
 namespace IIRS.Controllers
 {
-    [AdminFilter]
+    //[AdminFilter]
     public class AdminController : Controller
     {
         // GET: Admin
         public ActionResult Index()
+        {
+            return View();
+        }
+
+        public ActionResult Files()
         {
             return View();
         }

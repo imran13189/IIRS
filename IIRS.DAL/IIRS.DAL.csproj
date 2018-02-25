@@ -52,6 +52,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Connection.cs" />
+    <Compile Include="File.cs">
+      <DependentUpon>IIRS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetAdminFiles_Result.cs">
+      <DependentUpon>IIRS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetCustomer_Result.cs">
+      <DependentUpon>IIRS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetFiles_Result.cs">
+      <DependentUpon>IIRS.tt</DependentUpon>
+    </Compile>
     <Compile Include="IIRS.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

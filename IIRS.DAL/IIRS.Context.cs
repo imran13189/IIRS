@@ -12,6 +12,8 @@ namespace IIRS.DAL
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class IIRSEntities : DbContext
     {
@@ -28,5 +30,37 @@ namespace IIRS.DAL
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<UserInRole> UserInRoles { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<File> Files { get; set; }
+    
+        public virtual ObjectResult<GetCustomer_Result> GetCustomer(string name)
+        {
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetCustomer_Result>("GetCustomer", nameParameter);
+        }
+    
+        public virtual ObjectResult<GetAdminFiles_Result> GetAdminFiles(string search)
+        {
+            var searchParameter = search != null ?
+                new ObjectParameter("Search", search) :
+                new ObjectParameter("Search", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetAdminFiles_Result>("GetAdminFiles", searchParameter);
+        }
+    
+        public virtual ObjectResult<GetFiles_Result> GetFiles(string search, Nullable<int> userId)
+        {
+            var searchParameter = search != null ?
+                new ObjectParameter("Search", search) :
+                new ObjectParameter("Search", typeof(string));
+    
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("UserId", userId) :
+                new ObjectParameter("UserId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetFiles_Result>("GetFiles", searchParameter, userIdParameter);
+        }
     }
 }

@@ -1,0 +1,281 @@
+﻿
+
+<link href="~/Content/DataTables/css/dataTables.jqueryui.min.css" rel="stylesheet" />
+@*<link href="~/Content/DataTables/css/jquery.dataTables_themeroller.css" rel="stylesheet" />*@
+
+@*<div class="col-lg-12">
+<div class="row">
+    <div class="col-md-4">
+        <label>Customer</label>
+    </div>  
+</div>
+
+<div class="row">
+    <div class="col-lg-3">
+        <input id="txtCustomerName" type="text" name="CustomerName" class="form-control" />
+    </div>
+    <div class="col-lg-4">
+        <button type="button" id="btnsave" class="btn btn-primary">Add Customer</button>
+    </div>
+</div>*@
+
+<div class="row">
+    <table id="tblAdminFiles" class="display table table-bordered table-striped" >
+        <thead>
+            <tr>
+                <th>File Name</th>
+                <th>Action</th>
+                
+
+            </tr>
+        </thead>
+
+    </table>
+</div>
+</div>
+
+<div aria-hidden="true" aria-labelledby="fileModal" id="filemodal" role="dialog" tabindex="-1" class="modal fade">
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">Files</h4>
+            </div>
+            <div class="modal-body">
+                
+                <div class="row">
+                    <div class="col-lg-4">
+                        <input type="file" id="customerfile" />
+                    </div>
+                    <div class="col-lg-4">
+                        <button type="button" id="btnupload" class="btn btn-primary">Upload</button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table id="tblfile" class="display table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>File Name</th>
+                                    <th>Action</th>
+
+
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    </div>
+                
+                </div>
+         </div>
+    </div>
+</div>
+
+<div aria-hidden="true" aria-labelledby="orderModal" id="orderModal" role="dialog" tabindex="-1" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">Files</h4>
+            </div>
+            <div class="modal-body">
+
+                <form action="#" class="form-horizontal ">
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Order</label>
+                        <div class="col-md-10">
+                            <textarea id="txtDescription" class="wysihtml5 form-control" rows="9"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                       <div class="col-lg-2">
+                           </div>
+                        <div class="col-md-10">
+                            <button class="btn btn-info" onclick="SendOrder();" >Send</button>
+                        </div>
+                    </div>
+                </form>
+
+                
+
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="UserId" />
+<input type="hidden" id="FileId" />
+
+<script>
+    var tablefile;
+    function ShowFiles(userId) {
+        $("#filemodal").modal('show');
+        $("#UserId").val(userId);
+        debugger;
+        if ($.fn.dataTable.isDataTable(tablefile)) {
+            tablefile.ajax.reload();
+        }
+        else {
+            
+            tablefile = $('#tblfile').DataTable({
+
+                "proccessing": true,
+                "serverSide": true,
+                "ajax": {
+                    "url": $_GetFiles,
+                    "type": 'POST',
+                    "data": function (d) {
+                        d.model = { UserId: $("#UserId").val() };
+                    }
+                },
+                "language": {
+                    "search": "",
+                    "searchPlaceholder": "Search..."
+                },
+                "columns": [
+                     { "data": "FileName" },
+                     {
+                         "data": "UserId", "render": function (data, type, row) {
+                             //ShowFiles(row.UserId);
+                             if (row.IsSend) {
+                                 return '<a  class="btn btn-danger btn-xs">In process</a>';
+                             }
+                             else
+                             {
+                                 $("#FileId").val(row.FileId);
+                                 return '<a href="#orderModal" data-toggle="modal" class="btn btn-primary btn-xs" onclick="ShowFiles(' + row.UserId + ')">Send to admin</a>';
+                                 
+                             }
+                         }
+                     }
+
+                ],
+
+
+
+
+            });
+        }
+    }
+
+    function SendOrder()
+    {
+        $.ajax({
+            type: "POST",
+            url: $_SendOrder,
+            data: {Description:$("#txtDescription").val(), FileId: $("#FileId").val() },
+            success: function (resultdata) {
+                $("#orderModal").modal("hide");
+                tablefile.ajax.reload();
+               
+            }
+        });
+
+    }
+    $(document).ready(function () {
+       
+
+        var tablecustomer=    $('#tblAdminFiles').DataTable({
+
+            "proccessing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": $_GetAdminFiles,
+                "type": 'POST'
+            },
+            "language": {
+                "search": "",
+                "searchPlaceholder": "Search..."
+            },
+            "columns": [
+                 { "data": "FileName" },
+                 //{ "data": "" },
+                  //{
+                  //    "data": "IsActive",
+                  //    "render": function (data, type, row) {
+                  //        if (row.IsActive === true) {
+                  //            return '<input type="checkbox" checked class="chkBox">';
+                  //        }
+                  //        else {
+                  //            return '<input type="checkbox" class="chkBox">';
+                  //        }
+                  //        return data;
+                  //    }
+                  //},
+                  
+
+                 {
+                     "data": "UserId", "render": function (data, type, row) {
+                         //ShowFiles(row.UserId);
+                         return '<a href="#" class="btn btn-primary btn-sm" onclick="ShowFiles(' + row.UserId + ')">View File</a>';
+                     }
+                 }
+
+            ],
+
+
+
+
+        });
+
+
+      
+
+        $("#btnsave").click(function () {
+            $.ajax({
+                type: "POST",
+                url: $_AddCustomer,
+                data: {FullName:$("#txtCustomerName").val()},
+                success: function (resultdata) {
+                    tablecustomer.ajax.reload();
+                }
+            });
+
+
+        });
+
+
+        $('#btnupload').click(function () {
+
+            var data = new FormData();
+
+            var files = $("#customerfile").get(0).files;
+
+            // Add the uploaded image content to the form data collection
+            if (files.length > 0) {
+                data.append("UploadedFile", files[0]);
+                data.append("UserId", $("#UserId").val());
+            }
+
+            // Make Ajax request with the contentType = false, and procesDate = false
+            $.ajax({
+                type: "POST",
+                url: $_UpdloadFile,
+                contentType: false,
+                processData: false,
+                data: data,
+                success: function (resultdata) {
+                    tablefile.ajax.reload();
+                }
+            });
+        });
+
+
+        var chat = $.connection.notificationHub;
+        chat.client.addNewMessageToPage = function () {  
+            tablecustomer.ajax.reload();
+        };  
+        
+        $.connection.hub.start().done(function () {  
+            //$('#sendmessage').click(function () {  
+            //    chat.server.send($('#displayname').val(), $('#message').val());  
+            //    $('#message').val('').focus();  
+            //});  
+     
+    });  
+    
+    });
+
+   
+
+    </script>
