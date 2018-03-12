@@ -2,37 +2,70 @@
 
 <link href="~/Content/DataTables/css/dataTables.jqueryui.min.css" rel="stylesheet" />
 @*<link href="~/Content/DataTables/css/jquery.dataTables_themeroller.css" rel="stylesheet" />*@
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
 
-<div class="col-lg-12">
-<div class="row">
-    <div class="col-md-4">
-        <label>Customer</label>
-    </div>  
-</div>
+
 
 <div class="row">
-    <div class="col-lg-3">
-        <input id="txtCustomerName" type="text" name="CustomerName" class="form-control" />
-    </div>
-    <div class="col-lg-4">
-        <button type="button" id="btnsave" class="btn btn-primary">Add Customer</button>
-    </div>
+    <div class="col-md-12 col-lg-12">
+        <section class="panel">
+            <header class="panel-heading">
+              Add  Customer
+               
+            </header>
+            <div class="panel-body" style="display: block;">
+                <form id="customerForm">
+                    <div class="col-md-3">
+                        <label>Customer</label>
+                    </div>
+                    <div class="col-md-9">
+                        <label>Mobile Number</label>
+                    </div>
+                    <div class="col-lg-3">
+                        <input id="txtCustomerName" required type="text" name="CustomerName" class="form-control" />
+
+                    </div>
+                    <div class="col-lg-3">
+                        <input id="txtMobile" type="text" required name="Mobile" minlength="10" maxlength="10" class="form-control" />
+
+                    </div>
+                    <div class="col-lg-4">
+                        <button type="submit" id="btnsave" class="btn btn-primary">Add Customer</button>
+                    </div>
+                </form>
+                </div>
+</section>
+</div>
 </div>
 
-<div class="row">
-    <table id="tblCustomer" class="display table table-bordered table-striped" >
-        <thead>
-            <tr>
-                <th>Customer Name</th>
-                <th>Action</th>
-                
+ <div class="row">
+        <div class="col-md-12 col-lg-12">
+        <section class="panel">
+            <header class="panel-heading">
+                Customers
+             
+            </header>
+            <div class="panel-body" style="display: block;">
 
-            </tr>
-        </thead>
 
-    </table>
-</div>
-</div>
+                <table id="tblCustomer" class="display table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Customer Name</th>
+                            <th>Mobile</th>
+                            <th>Action</th>
+
+
+                        </tr>
+                    </thead>
+
+                </table>
+            </div>
+        </section>
+            </div>
+   </div>
+   
 
 <div aria-hidden="true" aria-labelledby="fileModal" id="filemodal" role="dialog" tabindex="-1" class="modal fade">
     <div class="modal-dialog" >
@@ -40,33 +73,51 @@
             <div class="modal-header">
                 <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
                 <h4 class="modal-title">Files</h4>
+
+                
             </div>
             <div class="modal-body">
                 
                 <div class="row">
-                    <div class="col-lg-4">
-                        <input type="file" id="customerfile" />
-                    </div>
-                    <div class="col-lg-4">
-                        <button type="button" id="btnupload" class="btn btn-primary">Upload</button>
-                    </div>
-                </div>
+                    <div class="col-md-12 col-lg-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            Upload file
 
-                <div class="row alert-info">
-                    <div class="col-lg-12">
-                        <table id="tblfile" class="display table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>File Name</th>
-                                    <th>Action</th>
+                        </header>
+                        <div class="panel-body" style="display: block;">
+                            <div class="col-lg-4">
+                                <input type="file" id="customerfile" />
+                            </div>
+                            <div class="col-lg-4">
+                                <button type="button" id="btnupload" class="btn btn-primary">Upload</button>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-success myprogress" role="progressbar" style="width:0%">0%</div>
+                            </div>
+                        </div>
+                        </section>
+                        </div>
+                    </div>
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12 ">
+                                <section class="panel">
+                                    <header class="panel-heading">
+                                        Customer files
+                                    </header>
+                                    <table id="tblfile" class="display table table-bordered table-striped" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>File Name</th>
+                                                <th>Action</th>
 
 
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                    </div>
-                
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </section>
+                            </div>
+                        </div>
                 </div>
          </div>
     </div>
@@ -92,7 +143,7 @@
                        <div class="col-lg-2">
                            </div>
                         <div class="col-md-10">
-                            <button class="btn btn-info" onclick="SendOrder();" >Send</button>
+                            <button class="btn btn-info" onclick="SendOrders();" >Send</button>
                         </div>
                     </div>
                 </form>
@@ -118,7 +169,7 @@
         else {
             
             tablefile = $('#tblfile').DataTable({
-
+                "lengthMenu": [[7, 25, 50], [7, 25, 50]],
                 "proccessing": true,
                 "serverSide": true,
                 "ajax": {
@@ -137,13 +188,14 @@
                      {
                          "data": "UserId", "render": function (data, type, row) {
                              //ShowFiles(row.UserId);
+                             $("#FileId").val(row.FileId);
                              if (row.IsSend) {
                                  return '<a  class="btn btn-danger btn-xs">In process</a>';
                              }
                              else
                              {
-                                 $("#FileId").val(row.FileId);
-                                 return '<a href="#orderModal" data-toggle="modal" class="btn btn-primary btn-xs" onclick="ShowFiles(' + row.UserId + ')">Send to admin</a>';
+                             
+                                 return '<a href="#"  onclick="ShowOrderModal(' + row.FileId + ')" class="btn btn-primary btn-xs" >Send to admin</a>';
                                  
                              }
                          }
@@ -158,37 +210,33 @@
         }
     }
 
-    var chat = $.connection.notificationHub;
-    $.connection.hub.start().done(function () {
-
-        //$('#BtnSend').click(function () {
-
-        //    chat.server.LetsChat($('#UserName').val(), $('#TxtMessage').val());
-
-        //    $('#TxtMessage').val('').focus();
-
-        //});
-
-    });
-    function SendOrder()
+    function ShowOrderModal(FileId)
     {
+        $("#orderModal").modal('show');
+        $("#FileId").val(FileId);
+    }
+    function SendOrders()
+    {
+        debugger;
         $.ajax({
             type: "POST",
             url: $_SendOrder,
-            data: {Description:$("#txtDescription").val(), FileId: $("#FileId").val() },
+            data: { Description: $("#txtDescription").val(), FileId: $("#FileId").val() },
+            async:false,
             success: function (resultdata) {
-                $("#orderModal").modal("hide");
                 tablefile.ajax.reload();
+                $("#orderModal").modal("hide");
                 $.connection.notificationHub.server.send();
             }
         });
-
+        debugger;
     }
+
     $(document).ready(function () {
        
 
         var tablecustomer=    $('#tblCustomer').DataTable({
-
+            "lengthMenu": [[7, 25, 50], [7, 25, 50]],
             "proccessing": true,
             "serverSide": true,
             "ajax": {
@@ -201,6 +249,7 @@
             },
             "columns": [
                  { "data": "FullName" },
+                   { "data": "Mobile" },
                  //{ "data": "" },
                   //{
                   //    "data": "IsActive",
@@ -233,22 +282,35 @@
 
       
 
-        $("#btnsave").click(function () {
-            $.ajax({
-                type: "POST",
-                url: $_AddCustomer,
-                data: {FullName:$("#txtCustomerName").val()},
-                success: function (resultdata) {
-                    tablecustomer.ajax.reload();
-                }
-            });
+        $("#customerForm").submit(function (e) {
+            e.preventDefault();
+            debugger;
+            if ($(this).valid())
+            {
+               var data = tablecustomer.column(1).data(); //column array of data table
+               
+               if ($.inArray($("#txtMobile").val().trim(), data) == -1) {
+                   $.ajax({
+                       type: "POST",
+                       url: $_AddCustomer,
+                       data: { FullName: $("#txtCustomerName").val(), Mobile: $("#txtMobile").val() },
+                       success: function (resultdata) {
+                           tablecustomer.ajax.reload();
+                       }
+                   });
+               }
+               else
+               {
+                   alert("Mobile already exist.");
+               }
+            }
 
 
         });
 
 
         $('#btnupload').click(function () {
-
+            debugger;
             var data = new FormData();
 
             var files = $("#customerfile").get(0).files;
@@ -268,11 +330,27 @@
                 data: data,
                 success: function (resultdata) {
                     tablefile.ajax.reload();
-
-                }
+        
+                },
+                xhr: function () {
+                    var xhr = new window.XMLHttpRequest();
+                    $('.myprogress').css('width', '0%');
+                xhr.upload.addEventListener("progress", function (evt) {
+                    if (evt.lengthComputable) {
+                        var percentComplete = evt.loaded / evt.total;
+                        percentComplete = parseInt(percentComplete * 100);
+                        $('.myprogress').text(percentComplete + '%');
+                        $('.myprogress').css('width', percentComplete + '%');
+                    }
+                }, false);
+                return xhr;
+            },
             });
         });
 
+        $("#txtMobile").keyup(function () {
+            tablecustomer.search(this.value).draw();
+        });
         //$('#sendmessage').click(function () {
         //    chat.server.send($('#displayname').val(), $('#message').val());
         //    $('#message').val('').focus();
@@ -289,9 +367,20 @@
             //});
 
         });
-        debugger;
+      
     });
 
    
+    var chat = $.connection.notificationHub;
+    $.connection.hub.start().done(function () {
 
+        //$('#BtnSend').click(function () {
+
+        //    chat.server.LetsChat($('#UserName').val(), $('#TxtMessage').val());
+
+        //    $('#TxtMessage').val('').focus();
+
+        //});
+
+    });
     </script>

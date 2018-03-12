@@ -15,7 +15,7 @@ namespace IIRS.Repository
             try
             {
                 user.Password = "123";
-                user.Username = "Customer";
+                user.Username = user.Mobile;
                 _db.Users.Add(user);
                 _db.UserInRoles.Add(new UserInRole() { RoleId = 3,UserId=user.UserId});
                 _db.SaveChanges();

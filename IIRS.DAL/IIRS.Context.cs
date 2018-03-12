@@ -29,8 +29,8 @@ namespace IIRS.DAL
     
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<UserInRole> UserInRoles { get; set; }
-        public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<File> Files { get; set; }
+        public virtual DbSet<User> Users { get; set; }
     
         public virtual ObjectResult<GetCustomer_Result> GetCustomer(string name)
         {

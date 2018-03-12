@@ -389,12 +389,14 @@
     <Content Include="Content\images\gallery\image4.jpg" />
     <Content Include="Content\images\gallery\image5.jpg" />
     <Content Include="Content\images\input-spinner.gif" />
+    <Content Include="Content\images\left.svg" />
     <Content Include="Content\images\lock-screen.jpg" />
     <Content Include="Content\images\lock_thumb.jpg" />
     <Content Include="Content\images\logo - Copy.png" />
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\images\nav-expand.png" />
     <Content Include="Content\images\product_img.png" />
+    <Content Include="Content\images\right.svg" />
     <Content Include="Content\images\search-icon.png" />
     <Content Include="Content\images\sm-img-1.jpg" />
     <Content Include="Content\images\sm-img-2.jpg" />
@@ -403,6 +405,7 @@
     <Content Include="Content\images\twitter_corner_black.png" />
     <Content Include="Content\images\twitter_corner_blue.png" />
     <Content Include="Content\images\weather_image.jpg" />
+    <Content Include="Content\imageviewer.css" />
     <Content Include="Content\js\advanced-datatable\css\demo_page.css" />
     <Content Include="Content\js\advanced-datatable\css\demo_table.css" />
     <Content Include="Content\js\advanced-datatable\css\demo_table_jui.css" />
@@ -506,6 +509,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\App.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\bs3\css\bootstrap-theme.css.map" />
@@ -630,6 +634,7 @@
     <Content Include="Scripts\DataTables\responsive.semanticui.js" />
     <Content Include="Scripts\DataTables\responsive.semanticui.min.js" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\imageviewer.min.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
@@ -668,6 +673,7 @@
     <Content Include="Views\Clerk\Customer.cshtml" />
     <Content Include="Views\Shared\_UrlVariables.cshtml" />
     <Content Include="Views\Admin\Files.cshtml" />
+    <Content Include="Views\Admin\_CustomerFileOrders.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using IIRS.Filters;
+using IIRS.DAL;
+using IIRS.Repository;
 
 namespace IIRS.Controllers
 {
@@ -19,6 +21,11 @@ namespace IIRS.Controllers
         public ActionResult Files()
         {
             return View();
+        }
+        [HttpPost]
+        public ActionResult CustomerFileOrders(int UserId)
+        {
+           return PartialView("_CustomerFileOrders",new ClerkRepository().GetCustomerFiles(UserId, null));
         }
     }
 }

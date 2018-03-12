@@ -1,0 +1,6 @@
+1. add deliever data in order item
+2. close date time
+3. 3 decimal in discount
+4. List price in items details
+5. Search in add form
+6. hide mark

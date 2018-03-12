@@ -17,18 +17,19 @@ namespace IIRS.DAL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public User()
         {
-            this.UserInRoles = new HashSet<UserInRole>();
             this.Files = new HashSet<File>();
+            this.UserInRoles = new HashSet<UserInRole>();
         }
     
         public int UserId { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public string FullName { get; set; }
+        public string Mobile { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserInRole> UserInRoles { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<File> Files { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserInRole> UserInRoles { get; set; }
     }
 }

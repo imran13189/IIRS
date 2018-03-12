@@ -7,11 +7,11 @@
       <Diagram DiagramId="430780d85a914db2a94ea5dd08846c5b" Name="Diagram1">
         <EntityTypeShape EntityType="IIRSModel.Role" Width="1.5" PointX="0.75" PointY="4.125" />
         <EntityTypeShape EntityType="IIRSModel.UserInRole" Width="1.5" PointX="3" PointY="0.875" />
-        <EntityTypeShape EntityType="IIRSModel.User" Width="1.5" PointX="0.75" PointY="1" />
         <AssociationConnector Association="IIRSModel.FK_UserInRole_Roles" />
-        <AssociationConnector Association="IIRSModel.FK_UserInRole_Users" />
         <EntityTypeShape EntityType="IIRSModel.File" Width="1.5" PointX="3" PointY="4" />
+        <EntityTypeShape EntityType="IIRSModel.User" Width="1.5" PointX="0.75" PointY="0.75" />
         <AssociationConnector Association="IIRSModel.FK_File_Users" />
+        <AssociationConnector Association="IIRSModel.FK_UserInRole_Users" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

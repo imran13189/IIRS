@@ -32,6 +32,7 @@
 
     @{ Html.RenderPartial("_UrlVariables");  }
     <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script src="~/Scripts/App.js"></script>
     <!--dynamic table-->
 
     <script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
@@ -240,7 +241,7 @@
                     <li class="dropdown">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                             <img alt="" src="images/avatar1_small.jpg">
-                            <span class="username">John Doe</span>
+                            <span class="username">Admin</span>
                             <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu extended logout">
@@ -272,16 +273,33 @@
                                 <span>Dashboard</span>
                             </a>
                         </li>
+                        @if (IIRS.Common.SessionManager.LoggedInUser.userInRole.FirstOrDefault().Role.RoleName == "Admin")
+                        {
                         <li class="sub-menu">
-        <a href="javascript:;">
-            <i class="fa fa-laptop"></i>
-            <span>Layouts</span>
-        </a>
-        <ul class="sub">
-            <li><a href="@Url.Action("Customer","Clerk")">Customer</a></li>
-            
-        </ul>
-    </li>
+                            <a href="@Url.Action("Files", "Admin")">
+                                <i class="fa fa-laptop"></i>
+                                <span>Customer Files</span>
+                            </a>
+                        </li>
+                        }
+                        else if (IIRS.Common.SessionManager.LoggedInUser.userInRole.FirstOrDefault().Role.RoleName == "Customer")
+                        {
+                            <li class="sub-menu">
+                                <a href="@Url.Action("Files", "Clerk")">
+                                    <i class="fa fa-laptop"></i>
+                                    <span>My Files</span>
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="sub-menu">
+                                <a href="@Url.Action("Customer", "Clerk")">
+                                    <i class="fa fa-laptop"></i>
+                                    <span>Customer</span>
+                                </a>
+                            </li>
+                        }
     @*<li class="sub-menu">
         <a href="javascript:;">
             <i class="fa fa-book"></i>

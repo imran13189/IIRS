@@ -24,20 +24,26 @@ namespace IIRS.API
         [HttpPost]
         public dynamic GetFiles([FromBody]DataTableRequest<GetAdminFiles_Result> request)
         {
-            AdminRepository _rep = new AdminRepository();
-            request.data = _rep.GetFiles(request.search.value);
-            var data = request.data.OrderBy(x => x.UserId).Skip(request.start).Take(request.length);
-            return Json(new
+            try
             {
-                // this is what datatables wants sending back
-                draw = request.draw,
-                recordsTotal = request.data.Count,
-                recordsFiltered = request.data.Count,
-                data = data,
-                length = request.length
-            });
-        
+                AdminRepository _rep = new AdminRepository();
+                request.data = _rep.GetFiles(request.search.value);
+                var data = request.data.OrderBy(x => x.UserId).Skip(request.start).Take(request.length);
+                return Json(new
+                {
+                    // this is what datatables wants sending back
+                    draw = request.draw,
+                    recordsTotal = request.data.Count,
+                    recordsFiltered = request.data.Count,
+                    data = data,
+                    length = request.length
+                });
+            }
+            catch(Exception e)
+            {
 
+            }
+            return true;
             
         }
         //[HttpPost]

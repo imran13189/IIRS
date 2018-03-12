@@ -19,7 +19,7 @@ namespace IIRS.Filters
                 {
                     if (!HttpContext.Current.Response.IsRequestBeingRedirected)
                     {
-                        HttpContext.Current.Response.Redirect("~/Account");
+                        HttpContext.Current.Response.Redirect("~/Account/Login");
                     }
                 }
                 else

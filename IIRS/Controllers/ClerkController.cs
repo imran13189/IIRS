@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using IIRS.Filters;
 namespace IIRS.Controllers
 {
-    //[ClerkFilter]
+    [ClerkFilter]
     public class ClerkController : Controller
     {
         // GET: Clerk
