@@ -1,0 +1,111 @@
+﻿@model List<IIRS.DAL.GetFiles_Result>
+@{
+    ViewBag.Title = "_CustomerFileOrders";
+    //Layout = null;
+}
+<style>
+    #image-gallery {
+        width: 100%;
+        position: relative;
+        height: 400px;
+        background: #000;
+    }
+
+        #image-gallery .image-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 50px;
+        }
+
+        #image-gallery .prev,
+        #image-gallery .next {
+            position: absolute;
+            height: 32px;
+            margin-top: -66px;
+            top: 50%;
+        }
+
+        #image-gallery .prev {
+            left: 20px;
+        }
+
+        #image-gallery .next {
+            right: 20px;
+            cursor: pointer;
+        }
+
+        #image-gallery .footer-info {
+            position: absolute;
+            height: 50px;
+            width: 100%;
+            left: 0;
+            bottom: 0;
+            line-height: 50px;
+            font-size: 24px;
+            text-align: center;
+            color: white;
+            border-top: 1px solid #FFF;
+        }
+</style>
+@*<link href="~/Content/imageviewer.css" rel="stylesheet" />
+<script src="~/Scripts/imageviewer.min.js"></script>*@
+
+<script type="text/javascript">
+    $(function () {
+
+        var images = [];
+        var data = JSON.parse('@Html.Raw(Json.Encode(Model))');
+        $.each(data, function (i, item) {
+            debugger;
+            images.push({
+                small: '@Url.Content("~/UploadedFiles/")'+item.FileName,
+                big: '@Url.Content("~/UploadedFiles/")' + item.FileName,
+                FileId:item.FileId
+            });
+        });
+        debugger;
+
+   
+    var curImageIdx = 1,
+        total = images.length;
+    var wrapper = $('#image-gallery'),
+        curSpan = wrapper.find('.current');
+    var viewer = ImageViewer(wrapper.find('.image-container'));
+
+    //display total count
+    wrapper.find('.total').html(total);
+
+    function showImage(){
+        var imgObj = images[curImageIdx - 1];
+        viewer.load(imgObj.small, imgObj.big);
+        curSpan.html(curImageIdx);
+        $("#hdnFileId").val(imgObj.FileId);
+    }
+
+    wrapper.find('.next').click(function(){
+         curImageIdx++;
+        if(curImageIdx > total) curImageIdx = 1;
+        showImage();
+    });
+
+    wrapper.find('.prev').click(function(){
+         curImageIdx--;
+        if(curImageIdx < 0) curImageIdx = total;
+        showImage();
+    });
+
+    //initially show image
+    showImage();
+});
+</script>
+
+<div id="image-gallery">
+    <div class="image-container"></div>
+    <img src="@Url.Content("~/Content/images/left.svg")" class="prev" />
+    <img src="@Url.Content("~/Content/images/right.svg")" class="next" />
+    <div class="footer-info">
+        <span class="current"></span>/<span class="total"></span>
+    </div>
+</div> 

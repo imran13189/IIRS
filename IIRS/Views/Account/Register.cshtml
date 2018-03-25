@@ -1,0 +1,88 @@
+﻿@model IIRS.DAL.User
+@{
+    ViewBag.Title = "Login";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="ThemeBucket">
+    <link rel="shortcut icon" href="images/favicon.png">
+    <title>Login</title>
+    <!--Core CSS -->
+    <link href="~/Content/bs3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/css/bootstrap-reset.css" rel="stylesheet">
+    <link href="~/Content/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <!-- Custom styles for this template -->
+    <link href="~/Content/css/style.css" rel="stylesheet">
+    <link href="~/Content/css/style-responsive.css" rel="stylesheet" />
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]>
+    <script src="js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="login-body">
+    <div class="container">
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { enctype = "multipart/form-data", @id = "formCarType", @class = "form-signin" }))
+{
+
+        @*<form class="form-signin" action="index.html">*@
+            <h2 class="form-signin-heading">registration now</h2>
+            <div class="login-wrap">
+                <p>Enter your personal details below</p>
+                <input type="text" class="form-control" name="Fullname" required placeholder="Full Name" autofocus>
+                <input type="text" class="form-control" name="Username" required placeholder="Email" autofocus>
+                @Html.DropDownList("DepartmentId", new SelectList((IEnumerable<IIRS.DAL.Department>)ViewBag.Department, "DepartmentId", "DepartmentName", "Select"), "----Select Department----", new { @class = "form-control", @required = true })
+                @Html.DropDownListFor(model=>model.DesignationId,new SelectList((IEnumerable<IIRS.DAL.Designation>)ViewBag.Desig,"DesignationId", "DesignationName","Select"),"----Select Designation---",new {@class= "form-control", @required=true })
+                
+                
+              
+                <input type="password" name="Password" class="form-control" required placeholder="Password">
+                <input type="password"  class="form-control" required placeholder="Re-type Password">
+                <label class="checkbox">
+                    <input type="checkbox" value="agree this condition"> I agree to the Terms of Service and Privacy Policy
+                </label>
+                <button class="btn btn-lg btn-login btn-block" type="submit">Submit</button>
+                <div class="registration">
+                    Already Registered.
+                    <a class="" href="login.html">
+                        Login
+                    </a>
+                </div>
+
+                <div>@ViewBag.message </div>
+            </div>
+            }
+        @*</form>*@
+    </div>
+    <script>
+
+    $(document).ready(function () {
+        //initSample();
+
+        $("#DepartmentId").change(function () {
+            $("#DesignationId").empty();
+            $.get("@Url.HttpRouteUrl("DefaultApi", new { controller = "AdminAPI", action = "GetDesignation"})" + "?DepartmentId=" + $(this).val(), function (data, status) {
+                debugger;
+                $(data).each(function ( i,item) {
+                    $("#DesignationId").append("<option value="+item.DesignationId+">" + item.DesignationName + "</option>")
+                });
+            });
+        });
+    });
+   </script>
+    <!-- Placed js at the end of the document so the pages load faster -->
+    <!--Core js-->
+    <script src="js/jquery.js"></script>
+    <script src="bs3/js/bootstrap.min.js"></script>
+</body>
+</html>
+
