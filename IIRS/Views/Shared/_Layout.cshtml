@@ -291,6 +291,15 @@
                                 </a>
                             </li>
                         }
+                        else if (IIRS.Common.SessionManager.LoggedInUser.userInRole.FirstOrDefault().Role.RoleName == "Department")
+                        {
+                            <li class="sub-menu">
+                                <a href="@Url.Action("Files", "Department")">
+                                    <i class="fa fa-laptop"></i>
+                                    <span>My Files</span>
+                                </a>
+                            </li>
+                        }
                         else
                         {
                             <li class="sub-menu">

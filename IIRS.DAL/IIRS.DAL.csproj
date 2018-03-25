@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>IIRS.DAL</RootNamespace>
     <AssemblyName>IIRS.DAL</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -51,14 +52,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Comment.cs">
+      <DependentUpon>IIRS.tt</DependentUpon>
+    </Compile>
     <Compile Include="Connection.cs" />
+    <Compile Include="Department.cs">
+      <DependentUpon>IIRS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Designation.cs">
+      <DependentUpon>IIRS.tt</DependentUpon>
+    </Compile>
     <Compile Include="File.cs">
       <DependentUpon>IIRS.tt</DependentUpon>
     </Compile>
     <Compile Include="GetAdminFiles_Result.cs">
       <DependentUpon>IIRS.tt</DependentUpon>
     </Compile>
+    <Compile Include="GetAdminOrders_Result.cs">
+      <DependentUpon>IIRS.tt</DependentUpon>
+    </Compile>
     <Compile Include="GetCustomer_Result.cs">
+      <DependentUpon>IIRS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetDepartmentOrders_Result.cs">
       <DependentUpon>IIRS.tt</DependentUpon>
     </Compile>
     <Compile Include="GetFiles_Result.cs">
@@ -79,8 +95,17 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>IIRS.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Order.cs">
+      <DependentUpon>IIRS.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Role.cs">
+      <DependentUpon>IIRS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_GetComments_Result.cs">
+      <DependentUpon>IIRS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_GetOrders_Result.cs">
       <DependentUpon>IIRS.tt</DependentUpon>
     </Compile>
     <Compile Include="User.cs">

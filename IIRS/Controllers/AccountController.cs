@@ -18,12 +18,12 @@ namespace IIRS.Controllers
         {
             return View();
         }
-        public ActionResult Login()
-        {
-            return View();
-        }
-        [HttpPost]
-        public ActionResult Login(string Username, string Password)
+        //public ActionResult Login()
+        //{
+        //    return View();
+        //}
+        //[HttpPost]
+        public ActionResult Login(string Username= "imran@sipaz.in", string Password= "123456")
         {
             UserRepository _repo = new UserRepository();
             LoggedInUserDetails data = _repo.GetLoginDetails(Username, Password);
@@ -44,6 +44,10 @@ namespace IIRS.Controllers
                 {
                     return RedirectToAction("Index", "Customer");
                 }
+                else if (data.userInRole.FirstOrDefault(x => x.Role.RoleName == "Department") != null)
+                {
+                    return RedirectToAction("Index", "Department");
+                }
                 return RedirectToAction("Login");
             }
 
@@ -56,6 +60,31 @@ namespace IIRS.Controllers
             //System.Web.HttpContext.Current.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);
 
             return RedirectToAction("Login", "Account");
+        }
+
+      
+
+        public ActionResult Register()
+        {
+            UserRepository _repo = new UserRepository();
+            ViewBag.Desig = _repo.GetDesig();
+            ViewBag.Department = _repo.GetDepartments();
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Register(User user)
+        {
+            UserRepository _repo = new UserRepository();
+            if (_repo.Register(user))
+            {
+                ViewBag.message =  "Email already registered";
+            }
+            else
+            {
+                ViewBag.message = "User registered successfully";
+            }
+
+            return RedirectToAction("Login");
         }
     }
 }

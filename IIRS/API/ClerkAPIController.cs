@@ -108,10 +108,11 @@ namespace IIRS.API
         }
 
         [HttpPost]
-        public dynamic SendOrder([FromBody]File file)
+        public dynamic SendOrder([FromBody]Order order)
         {
             ClerkRepository _rep = new ClerkRepository();
-            _rep.SendOrder(file);
+            //order.UserId = IIRS.Common.SessionManager.LoggedInUser.UserID;
+            //_rep.SendOrder(order);
             return true;
         }
 

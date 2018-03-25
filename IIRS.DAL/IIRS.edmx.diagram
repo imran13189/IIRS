@@ -4,15 +4,23 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="430780d85a914db2a94ea5dd08846c5b" Name="Diagram1">
-        <EntityTypeShape EntityType="IIRSModel.Role" Width="1.5" PointX="0.75" PointY="4.125" />
-        <EntityTypeShape EntityType="IIRSModel.UserInRole" Width="1.5" PointX="3" PointY="0.875" />
+      <Diagram DiagramId="430780d85a914db2a94ea5dd08846c5b" Name="Diagram1" ZoomLevel="68">
+        <EntityTypeShape EntityType="IIRSModel.Department" Width="1.5" PointX="0.75" PointY="9.125" />
+        <EntityTypeShape EntityType="IIRSModel.Designation" Width="1.5" PointX="3" PointY="8.875" />
+        <EntityTypeShape EntityType="IIRSModel.File" Width="1.5" PointX="7.5" PointY="12.625" />
+        <EntityTypeShape EntityType="IIRSModel.Role" Width="1.5" PointX="5.25" PointY="5.125" />
+        <EntityTypeShape EntityType="IIRSModel.UserInRole" Width="1.5" PointX="7.5" PointY="5.875" />
+        <AssociationConnector Association="IIRSModel.FK_Designation_Department" />
         <AssociationConnector Association="IIRSModel.FK_UserInRole_Roles" />
-        <EntityTypeShape EntityType="IIRSModel.File" Width="1.5" PointX="3" PointY="4" />
-        <EntityTypeShape EntityType="IIRSModel.User" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="IIRSModel.Comment" Width="1.5" PointX="3" PointY="0.875" />
+        <EntityTypeShape EntityType="IIRSModel.Order" Width="1.5" PointX="7.5" PointY="16.625" />
+        <EntityTypeShape EntityType="IIRSModel.User" Width="1.5" PointX="5.25" PointY="16.25" />
+        <AssociationConnector Association="IIRSModel.FK_Comments_Orders" />
+        <AssociationConnector Association="IIRSModel.FK_Users_Designation" />
         <AssociationConnector Association="IIRSModel.FK_File_Users" />
+        <AssociationConnector Association="IIRSModel.FK_Orders_Users" />
         <AssociationConnector Association="IIRSModel.FK_UserInRole_Users" />
-      </Diagram>
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

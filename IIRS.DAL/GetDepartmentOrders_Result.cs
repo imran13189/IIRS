@@ -10,15 +10,15 @@
 namespace IIRS.DAL
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class File
+    public partial class GetDepartmentOrders_Result
     {
-        public long FileId { get; set; }
-        public string FileName { get; set; }
-        public string Description { get; set; }
+        public int OrderId { get; set; }
+        public int ApplicantUserId { get; set; }
+        public System.DateTime Created { get; set; }
+        public Nullable<int> DepartmentUserId { get; set; }
         public int UserId { get; set; }
-    
-        public virtual User User { get; set; }
+        public string FullName { get; set; }
+        public string Mobile { get; set; }
     }
 }

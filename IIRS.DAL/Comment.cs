@@ -12,13 +12,14 @@ namespace IIRS.DAL
     using System;
     using System.Collections.Generic;
     
-    public partial class File
+    public partial class Comment
     {
-        public long FileId { get; set; }
-        public string FileName { get; set; }
-        public string Description { get; set; }
+        public long CommentId { get; set; }
         public int UserId { get; set; }
+        public string Comments { get; set; }
+        public System.DateTime Created { get; set; }
+        public int OrderId { get; set; }
     
-        public virtual User User { get; set; }
+        public virtual Order Order { get; set; }
     }
 }

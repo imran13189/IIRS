@@ -99,7 +99,7 @@
 </div>
 <input type="hidden" id="UserId" />
 <input type="hidden" id="FileId" />
-
+<input type="hidden" id="hdnFileId">
 <script>
     var tablefile;
     function ShowFiles(userId) {
@@ -114,12 +114,24 @@
         });
     }
 
+    function SendToDepartment(user) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SendToDepartment","Admin")',
+            data: { user: user },
+            success: function (result) {
+                $("#FileViewer").html(result)
+                $("#orderModal").modal("show");
+            }
+        });
+    }
+
     function SendOrder()
     {
         $.ajax({
             type: "POST",
-            url: $_SendOrder,
-            data: {Description:$("#txtDescription").val(), FileId: $("#FileId").val() },
+            url: '@Url.Action("SendOrder","Admin")',
+            data: { OrderDesc: $("#txtDescription").val(), FileId: $("#hdnFileId").val() },
             success: function (resultdata) {
                 $("#orderModal").modal("hide");
                 tablefile.ajax.reload();
@@ -147,7 +159,8 @@
                  {
                      "data": "UserId", "render": function (data, type, row) {
                          //ShowFiles(row.UserId);
-                         return '<a href="#" class="btn btn-primary btn-sm" onclick="ShowFiles(' + row.UserId + ')">View File</a>';
+                         //return '<a href="#" class="btn btn-primary btn-sm" onclick="ShowFiles(' + row + ')">View File</a>';
+                         return '<a href="@Url.Action("SendToDepartment","Admin")?userId=' + row.UserId + '" class="btn btn-primary btn-sm" >Send</a>';
                      }
                  }
 

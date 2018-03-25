@@ -51,15 +51,18 @@
 </style>
 @*<link href="~/Content/imageviewer.css" rel="stylesheet" />
 <script src="~/Scripts/imageviewer.min.js"></script>*@
+
 <script type="text/javascript">
     $(function () {
 
         var images = [];
         var data = JSON.parse('@Html.Raw(Json.Encode(Model))');
         $.each(data, function (i, item) {
+            debugger;
             images.push({
                 small: '@Url.Content("~/UploadedFiles/")'+item.FileName,
-                big:'@Url.Content("~/UploadedFiles/")'+item.FileName
+                big: '@Url.Content("~/UploadedFiles/")' + item.FileName,
+                FileId:item.FileId
             });
         });
         debugger;
@@ -78,6 +81,7 @@
         var imgObj = images[curImageIdx - 1];
         viewer.load(imgObj.small, imgObj.big);
         curSpan.html(curImageIdx);
+        $("#hdnFileId").val(imgObj.FileId);
     }
 
     wrapper.find('.next').click(function(){

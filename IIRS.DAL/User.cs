@@ -18,6 +18,7 @@ namespace IIRS.DAL
         public User()
         {
             this.Files = new HashSet<File>();
+            this.Orders = new HashSet<Order>();
             this.UserInRoles = new HashSet<UserInRole>();
         }
     
@@ -26,9 +27,14 @@ namespace IIRS.DAL
         public string Password { get; set; }
         public string FullName { get; set; }
         public string Mobile { get; set; }
+        public Nullable<int> DesignationId { get; set; }
+        public System.DateTime Created { get; set; }
     
+        public virtual Designation Designation { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<File> Files { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Order> Orders { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserInRole> UserInRoles { get; set; }
     }

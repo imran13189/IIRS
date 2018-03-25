@@ -52,13 +52,25 @@ namespace IIRS.Repository
             }
         }
 
-        public File SendOrder(File file)
+        public bool SendOrder(OrderModel order)
         {
-           File fileData= _db.Files.FirstOrDefault(x => x.FileId == file.FileId);
-            fileData.Description = file.Description;
-            fileData.IsSend = true;
+            Order orderDetails = _db.Orders.FirstOrDefault(x => x.ApplicantUserId == order.ApplicantUserId);
+           
+            if (orderDetails==null)
+            {
+                orderDetails = new Order();
+                orderDetails.ApplicantUserId = order.ApplicantUserId;
+                orderDetails.Created = DateTime.UtcNow;
+                _db.Orders.Add(orderDetails);
+            }
+            Comment comment = new Comment();
+            comment.UserId = order.UserId;
+            comment.Comments = order.Comment;
+            comment.Created = DateTime.UtcNow;
+            comment.OrderId = orderDetails.OrderId;
+            _db.Comments.Add(comment);
             _db.SaveChanges();
-            return file;
+            return true;
         }
     }
 }

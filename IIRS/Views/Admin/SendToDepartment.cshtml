@@ -1,0 +1,161 @@
+﻿@model IIRS.Core.Model.OrderModel
+
+@{
+    ViewBag.Title = "SendToDepartment";
+}
+
+
+<link href="~/Content/imageviewer.css" rel="stylesheet" />
+<script src="~/Scripts/imageviewer.min.js"></script>
+
+
+<script>
+    CKEDITOR.replace("editor1");
+    CKEDITOR.editorConfig = function (config) {
+        config.language = 'es';
+        config.uiColor = '#F7B42C';
+        config.height = 300;
+        config.toolbarCanCollapse = true;
+    };
+    </script>
+<div class="row">
+    <div class="col-lg-12">
+        @using (Html.BeginForm("SendToDepartment", "Admin", FormMethod.Post, new { enctype = "multipart/form-data", @id = "formOrder", @class = "form-horizontal" }))
+        {
+            <div class="form-group">
+                <label for="inputEmail1" class="col-lg-2 col-sm-2 control-label">Customer</label>
+                <div class="col-lg-8">
+                    @Html.TextBoxFor(x => x.CustomerName, new { @class = "form-control", @rows = "10",@disabled="true" })
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputEmail1" class="col-lg-2 col-sm-2 control-label">Orders</label>
+                <div class="col-lg-8">
+                   @Html.TextAreaFor(x=>x.Comment, new {  @class = "form-control",@rows="10" ,@required=true})
+                    
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputEmail1" class="col-lg-2 col-sm-2 control-label">Department</label>
+                <div class="col-lg-8">
+
+                    @Html.DropDownListFor(model => model.DepartmentId, new SelectList((IEnumerable<IIRS.DAL.Department>)ViewBag.Department, "DepartmentId", "DepartmentName", "Select"), "----Select Department----", new { @class = "form-control", @required = true })
+
+
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="inputEmail1" class="col-lg-2 col-sm-2 control-label">Designation</label>
+                <div class="col-lg-8">
+                    @Html.DropDownListFor(model => model.DesignationId, new SelectList((IEnumerable<IIRS.DAL.Designation>)ViewBag.Desig, "DesignationId", "DesignationName", "Select"), "----Select Designation---", new { @class = "form-control", @required = true })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputEmail1" class="col-lg-2 col-sm-2 control-label">Designation</label>
+                <div class="col-lg-8">
+                    <select id="DepartmentUserId" name="DepartmentUserId" required class="form-control"></select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-offset-2 col-lg-10">
+
+                    <button type="button" onclick="ShowFiles()" class="btn btn-info">File</button>
+                    <button type="submit" class="btn btn-success">Send</button>
+                </div>
+            </div>
+            @Html.HiddenFor(x => x.ApplicantUserId);
+            @Html.HiddenFor(x => x.OrderId);
+        }
+        </div>
+    </div>
+
+<div aria-hidden="true" aria-labelledby="orderModal" id="orderModal" role="dialog" tabindex="-1" class="modal fade">
+    <div class="modal-dialog" style="width:90%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">Files</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div id="FileViewer" class="col-lg-12">
+
+                    </div>
+                    <div class="col-lg-12" style="padding-top: 13PX;">
+
+                        <form action="#" class="form-horizontal ">
+                            <div class="form-group">
+                                <label class="control-label col-md-2">Order</label>
+                                <div class="col-md-10">
+                                    <textarea id="txtDescription" placeholder="Please enter the comments" class="wysihtml5 form-control" rows="3"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-2">
+                                </div>
+                                <div class="col-md-10">
+                                    <button class="btn btn-info" onclick="SendOrder();">Send</button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    
+    $(document).ready(function () {
+        //initSample();
+
+        $("#DepartmentId").change(function () {
+            $("#DesignationId").empty();
+            $("#DesignationId").append("<option >---Select--</option>")
+            $.get("@Url.HttpRouteUrl("DefaultApi", new { controller = "AdminAPI", action = "GetDesignation"})" + "?DepartmentId=" + $(this).val(), function (data, status) {
+                debugger;
+                $(data).each(function ( i,item) {
+                    $("#DesignationId").append("<option value="+item.DesignationId+">" + item.DesignationName + "</option>")
+
+                });
+            });
+
+        });
+
+        $("#DesignationId").change(function () {
+            $("#DepartmentUserId").empty();
+            $("#DepartmentUserId").append("<option >---Select--</option>")
+            $.get("@Url.HttpRouteUrl("DefaultApi", new { controller = "AdminAPI", action = "GetDepartmentUsers" })" + "?DesignationId=" + $(this).val(), function (data, status) {
+                debugger;
+                $(data).each(function ( i,item) {
+                    $("#DepartmentUserId").append("<option value=" + item.UserId + ">" + item.FullName + "</option>")
+
+                });
+            });
+
+        });
+        
+    });
+
+    function ShowFiles() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CustomerFileOrders","Admin")',
+            data: { UserId: '@Model.UserId' },
+            success: function (result) {
+                $("#FileViewer").html(result)
+                $("#orderModal").modal("show");
+            }
+        });
+    }
+
+</script>

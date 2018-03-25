@@ -26,5 +26,35 @@ namespace IIRS.Repository
             }
 
         }
+        public IEnumerable<Designation> GetDesig()
+        {
+            return _db.Designations;
+        }
+
+        public IEnumerable<Department> GetDepartments()
+        {
+            return _db.Departments;
+        }
+
+        public bool Register(User user)
+        {
+           if(_db.Users.Any(x => x.Username == user.Username))
+            {
+                return true;
+            }
+            user.Created = DateTime.UtcNow;
+            _db.Users.Add(user);
+       
+            _db.UserInRoles.Add(new UserInRole() { RoleId = 3, UserId = user.UserId });
+            _db.SaveChanges();
+            return false;
+
+        }
+
+        public User GetUserDetails(int userId)
+        {
+           return _db.Users.FirstOrDefault(x => x.UserId == userId);
+
+        }
     }
 }

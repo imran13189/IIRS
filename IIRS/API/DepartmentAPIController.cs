@@ -13,21 +13,46 @@ using System.Web;
 
 namespace IIRS.API
 {
-    public class AdminAPIController : ApiController
+    public class DepartmentAPIController : ApiController
     {
 
         public void GET()
         {
             
         }
-        
         [HttpPost]
-        public dynamic GetFiles([FromBody]DataTableRequest<GetAdminFiles_Result> request)
+        public dynamic AddCustomer(User user)
+        {
+            ClerkRepository _rep = new ClerkRepository();
+            _rep.AddCustomer(user);
+            return true;
+        }
+        [HttpPost]
+        public dynamic GetOrder([FromBody]DataTableRequest<GetDepartmentOrders_Result> request)
+        {
+            DepartmentRepository _rep = new DepartmentRepository();
+            request.data = _rep.GetOrders(request.model.DepartmentUserId.Value);
+            var data = request.data.OrderBy(x => x.UserId).Skip(request.start).Take(request.length);
+            return Json(new
+            {
+                // this is what datatables wants sending back
+                draw = request.draw,
+                recordsTotal = request.data.Count,
+                recordsFiltered = request.data.Count,
+                data = data,
+                length = request.length
+            });
+        
+
+            
+        }
+        [HttpPost]
+        public dynamic GetFiles([FromBody]DataTableRequest<GetFiles_Result> request)
         {
             try
             {
-                AdminRepository _rep = new AdminRepository();
-                request.data = _rep.GetFiles(request.search.value);
+                ClerkRepository _rep = new ClerkRepository();
+                request.data = _rep.GetCustomerFiles(request.model.UserId, request.search.value);
                 var data = request.data.OrderBy(x => x.UserId).Skip(request.start).Take(request.length);
                 return Json(new
                 {
@@ -41,34 +66,9 @@ namespace IIRS.API
             }
             catch(Exception e)
             {
-
+                return false;
             }
-            return true;
-            
         }
-        //[HttpPost]
-        //public dynamic GetFiles([FromBody]DataTableRequest<GetFiles_Result> request)
-        //{
-        //    try
-        //    {
-        //        ClerkRepository _rep = new ClerkRepository();
-        //        request.data = _rep.GetCustomerFiles(request.model.UserId, request.search.value);
-        //        var data = request.data.OrderBy(x => x.UserId).Skip(request.start).Take(request.length);
-        //        return Json(new
-        //        {
-        //            // this is what datatables wants sending back
-        //            draw = request.draw,
-        //            recordsTotal = request.data.Count,
-        //            recordsFiltered = request.data.Count,
-        //            data = data,
-        //            length = request.length
-        //        });
-        //    }
-        //    catch(Exception e)
-        //    {
-        //        return false;
-        //    }
-        //}
 
         [HttpPost]
         public dynamic UploadFile()
@@ -116,18 +116,34 @@ namespace IIRS.API
             return true;
         }
 
-        public dynamic GetDesignation(int DepartmentId)
+        public dynamic GetCommentDescription(int commentId)
         {
-            AdminRepository _admin = new AdminRepository();
-            return _admin.GetDesignation(DepartmentId).ToList();
+            DepartmentRepository _repo = new DepartmentRepository();
+            return _repo.GetComment(commentId);
         }
 
-        public dynamic GetDepartmentUsers(int DesignationId)
+        [HttpPost]
+        public dynamic GetComments([FromBody]DataTableRequest<SP_GetComments_Result> request)
         {
-            AdminRepository _admin = new AdminRepository();
-            return _admin.GetUser(DesignationId).ToList();
+            try
+            {
+                DepartmentRepository _rep = new DepartmentRepository();
+                request.data = _rep.GetComments(request.model.UserId, request.model.OrderId);
+                var data = request.data.OrderBy(x => x.UserId).Skip(request.start).Take(request.length);
+                return Json(new
+                {
+                    // this is what datatables wants sending back
+                    draw = request.draw,
+                    recordsTotal = request.data.Count,
+                    recordsFiltered = request.data.Count,
+                    data = data,
+                    length = request.length
+                });
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
         }
-
-
     }
 }

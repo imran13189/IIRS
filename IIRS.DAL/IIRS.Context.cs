@@ -27,9 +27,13 @@ namespace IIRS.DAL
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Department> Departments { get; set; }
+        public virtual DbSet<Designation> Designations { get; set; }
+        public virtual DbSet<File> Files { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<UserInRole> UserInRoles { get; set; }
-        public virtual DbSet<File> Files { get; set; }
+        public virtual DbSet<Comment> Comments { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<User> Users { get; set; }
     
         public virtual ObjectResult<GetCustomer_Result> GetCustomer(string name)
@@ -61,6 +65,42 @@ namespace IIRS.DAL
                 new ObjectParameter("UserId", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetFiles_Result>("GetFiles", searchParameter, userIdParameter);
+        }
+    
+        public virtual ObjectResult<SP_GetOrders_Result> SP_GetOrders(Nullable<int> userId)
+        {
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("UserId", userId) :
+                new ObjectParameter("UserId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_GetOrders_Result>("SP_GetOrders", userIdParameter);
+        }
+    
+        public virtual ObjectResult<GetAdminOrders_Result> GetAdminOrders()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetAdminOrders_Result>("GetAdminOrders");
+        }
+    
+        public virtual ObjectResult<GetDepartmentOrders_Result> GetDepartmentOrders(Nullable<int> departmentUserId)
+        {
+            var departmentUserIdParameter = departmentUserId.HasValue ?
+                new ObjectParameter("DepartmentUserId", departmentUserId) :
+                new ObjectParameter("DepartmentUserId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetDepartmentOrders_Result>("GetDepartmentOrders", departmentUserIdParameter);
+        }
+    
+        public virtual ObjectResult<SP_GetComments_Result> SP_GetComments(Nullable<int> userId, Nullable<int> orderId)
+        {
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("UserId", userId) :
+                new ObjectParameter("UserId", typeof(int));
+    
+            var orderIdParameter = orderId.HasValue ?
+                new ObjectParameter("OrderId", orderId) :
+                new ObjectParameter("OrderId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_GetComments_Result>("SP_GetComments", userIdParameter, orderIdParameter);
         }
     }
 }

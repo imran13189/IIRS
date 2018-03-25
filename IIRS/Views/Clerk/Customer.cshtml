@@ -116,6 +116,7 @@
                                         </thead>
                                     </table>
                                 </section>
+                                <button onclick="ShowOrderModal()"></button>
                             </div>
                         </div>
                 </div>
@@ -210,18 +211,18 @@
         }
     }
 
-    function ShowOrderModal(FileId)
+    function ShowOrderModal(userId)
     {
         $("#orderModal").modal('show');
-        $("#FileId").val(FileId);
+        $("#UserId").val(userId);
     }
     function SendOrders()
     {
         debugger;
         $.ajax({
             type: "POST",
-            url: $_SendOrder,
-            data: { Description: $("#txtDescription").val(), FileId: $("#FileId").val() },
+            url: '@Url.Action("SendOrder","Clerk")',
+            data: { Comment: $("#txtDescription").val(), ApplicantUserId: $("#UserId").val() },
             async:false,
             success: function (resultdata) {
                 tablefile.ajax.reload();
@@ -268,7 +269,9 @@
                  {
                      "data": "UserId", "render": function (data, type, row) {
                          //ShowFiles(row.UserId);
-                         return '<a href="#" class="btn btn-primary btn-sm" onclick="ShowFiles(' + row.UserId + ')">Show Files</a>';
+                         var buttons = '<a href="#"  onclick="ShowOrderModal(' + row.UserId + ')" class="btn btn-primary btn-xs" >Send to admin</a>'
+                         buttons += '&nbsp;<a href="#" class="btn btn-primary btn-xs" onclick="ShowFiles(' + row.UserId + ')">Show Files</a>'
+                         return buttons;
                      }
                  }
 

@@ -1,0 +1,257 @@
+﻿@model IIRS.Core.Model.OrderModel
+
+@{
+    ViewBag.Title = "SendToDepartment";
+}
+
+
+<link href="~/Content/imageviewer.css" rel="stylesheet" />
+<script src="~/Scripts/imageviewer.min.js"></script>
+
+
+<script>
+    CKEDITOR.replace("editor1");
+    CKEDITOR.editorConfig = function (config) {
+        config.language = 'es';
+        config.uiColor = '#F7B42C';
+        config.height = 300;
+        config.toolbarCanCollapse = true;
+    };
+    </script>
+<div class="row">
+    <div class="col-lg-12">
+        @using (Html.BeginForm("SendToDepartment", "Admin", FormMethod.Post, new { enctype = "multipart/form-data", @id = "formOrder", @class = "form-horizontal" }))
+        {
+            <div class="form-group">
+                <label for="inputEmail1" class="col-lg-2 col-sm-2 control-label">Customer</label>
+                <div class="col-lg-8">
+                    @Html.TextBoxFor(x => x.CustomerName, new { @class = "form-control", @rows = "10",@disabled="true" })
+
+                </div>
+            </div>
+
+            @*<div class="form-group">
+                <label for="inputEmail1" class="col-lg-2 col-sm-2 control-label">Orders</label>
+                <div class="col-lg-8">
+                   @Html.TextAreaFor(x=>x.Comment, new {  @class = "form-control",@rows="10" ,@required=true})
+                    
+                </div>
+            </div>*@
+
+        
+
+            <div class="form-group">
+                <div class="col-lg-offset-2 col-lg-10">
+
+                    <button type="button" onclick="ShowFiles()" class="btn btn-info">File</button>
+                    <button type="button" id="addComment" class="btn btn-success">Add comment</button>
+                </div>
+            </div>
+            @Html.HiddenFor(x => x.UserId);
+            @Html.HiddenFor(x => x.OrderId);
+            @Html.HiddenFor(x => x.DepartmentUserId);
+        }
+        </div>
+    
+    </div>
+<div class="row">
+    <div class="col-lg-12">
+        <table id="tblComments" class="display table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Dated</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+        </table>
+    </div>
+    </div>
+    <div aria-hidden="true" aria-labelledby="orderModal" id="orderModal" role="dialog" tabindex="-1" class="modal fade">
+        <div class="modal-dialog" style="width:90%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                    <h4 class="modal-title">Files</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div id="FileViewer" class="col-lg-12">
+
+                        </div>
+                        <div class="col-lg-12" style="padding-top: 13PX;">
+
+                            <form action="#" class="form-horizontal ">
+                                <div class="form-group">
+                                    <label class="control-label col-md-2">Order</label>
+                                    <div class="col-md-10">
+                                        <textarea id="txtDescription" placeholder="Please enter the comments" class="wysihtml5 form-control" rows="3"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-lg-2">
+                                    </div>
+                                    <div class="col-md-10">
+                                        <button class="btn btn-info" onclick="SendOrder();">Send</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div aria-hidden="true" aria-labelledby="commentModal" id="commentModal" role="dialog" tabindex="-1" class="modal fade">
+        <div class="modal-dialog" style="width:90%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                    <h4 class="modal-title">Comments</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="col-lg-12" id="divComment">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div aria-hidden="true" aria-labelledby="addCommentModal" id="addCommentModal" role="dialog" tabindex="-1" class="modal fade">
+    <div class="modal-dialog" style="width:90%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">Files</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div id="FileViewer" class="col-lg-12">
+
+                    </div>
+                    <div class="col-lg-12" style="padding-top: 13PX;">
+
+                        <form class="form-horizontal ">
+                            <div class="form-group">
+                                <label class="control-label col-md-2">Comment</label>
+                                <div class="col-md-10">
+                                    <textarea id="txtComment" placeholder="Please enter the comments" class="wysihtml5 form-control" rows="3"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-2">
+                                </div>
+                                <div class="col-md-10">
+                                    <button class="btn btn-info"  id="saveComment" >Add comment</button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script>
+
+        $(document).ready(function () {
+            //initSample();
+
+            $("#DepartmentId").change(function () {
+                $("#DesignationId").empty();
+                $.get("@Url.HttpRouteUrl("DefaultApi", new { controller = "AdminAPI", action = "GetDesignation"})" + "?DepartmentId=" + $(this).val(), function (data, status) {
+                    debugger;
+                    $(data).each(function (i, item) {
+                        $("#DesignationId").append("<option value=" + item.DesignationId + ">" + item.DesignationName + "</option>")
+
+                    });
+                });
+
+            });
+
+
+            var tblComments = $('#tblComments').DataTable({
+                "lengthMenu": [[7, 25, 50], [7, 25, 50]],
+                "proccessing": true,
+                "serverSide": true,
+                "ajax": {
+                    "url": $_GetComments,
+                    "type": 'POST',
+                    "data": function (d) {
+                        d.model = { UserId: $("#DepartmentUserId").val(), OrderId: $("#OrderId").val() };
+                    }
+                },
+                "language": {
+                    "search": "",
+                    "searchPlaceholder": "Search..."
+                },
+                "columns": [
+                     { "data": "FullName" },
+                     { "data": "Created" },
+                     {
+                         "data": "CommentId", "render": function (data, type, row) {
+                             //ShowFiles(row.UserId);
+                             debugger;
+                             var buttons = '<a href="#"  onclick="ShowComment(' + row.CommentId + ')" class="btn btn-primary btn-xs" >View comment</a>'
+                             return buttons;
+                         }
+                     }
+
+                ],
+
+
+
+
+            });
+
+            $("#addComment").click(function () {
+
+                $("#addCommentModal").modal("show");
+
+            });
+
+            $("#saveComment").click(function (e) {
+                e.preventDefault();
+                var Comments = { OrderId: $("#OrderId").val(), Comments: $("#txtComment").val() };
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("AddComment", "Department")',
+                    data: { comment: Comments },
+                    success: function (result) {
+                        $("#addCommentModal").modal("hide");
+                        tblComments.ajax.reload();
+                    }
+                });
+            });
+
+
+        });
+
+        function ShowFiles() {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("CustomerFileOrders","Admin")',
+                data: { UserId: '@Model.UserId' },
+                success: function (result) {
+                    $("#FileViewer").html(result)
+                    $("#orderModal").modal("show");
+                }
+            });
+        }
+
+        function ShowComment(commentId) {
+            $.get("@Url.HttpRouteUrl("DefaultApi", new { controller = "DepartmentAPI", action = "GetCommentDescription" })" + "?commentId=" + commentId, function (data, status) {
+                $("#divComment").html(data);
+                $("#commentModal").modal("show");
+            });
+        }
+
+        
+
+    </script>
