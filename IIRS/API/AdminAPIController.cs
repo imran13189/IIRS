@@ -46,29 +46,7 @@ namespace IIRS.API
             return true;
             
         }
-        //[HttpPost]
-        //public dynamic GetFiles([FromBody]DataTableRequest<GetFiles_Result> request)
-        //{
-        //    try
-        //    {
-        //        ClerkRepository _rep = new ClerkRepository();
-        //        request.data = _rep.GetCustomerFiles(request.model.UserId, request.search.value);
-        //        var data = request.data.OrderBy(x => x.UserId).Skip(request.start).Take(request.length);
-        //        return Json(new
-        //        {
-        //            // this is what datatables wants sending back
-        //            draw = request.draw,
-        //            recordsTotal = request.data.Count,
-        //            recordsFiltered = request.data.Count,
-        //            data = data,
-        //            length = request.length
-        //        });
-        //    }
-        //    catch(Exception e)
-        //    {
-        //        return false;
-        //    }
-        //}
+    
 
         [HttpPost]
         public dynamic UploadFile()
@@ -128,6 +106,25 @@ namespace IIRS.API
             return _admin.GetUser(DesignationId).ToList();
         }
 
+        [HttpPost]
+        public dynamic GetAdminOrders([FromBody]DataTableRequest<GetAdminOrders_Result> request)
+        {
+            AdminRepository _rep = new AdminRepository();
+            request.data = _rep.GetAdminOrders(request.search.value);
+            var data = request.data.OrderBy(x => x.Created).Skip(request.start).Take(request.length);
+            return Json(new
+            {
+                // this is what datatables wants sending back
+                draw = request.draw,
+                recordsTotal = request.data.Count,
+                recordsFiltered = request.data.Count,
+                data = data,
+                length = request.length
+            });
+
+
+
+        }
 
     }
 }

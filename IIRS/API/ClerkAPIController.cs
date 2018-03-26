@@ -32,7 +32,7 @@ namespace IIRS.API
         {
             ClerkRepository _rep = new ClerkRepository();
             request.data = _rep.GetCustomer(request.search.value);
-            var data = request.data.OrderBy(x => x.UserId).Skip(request.start).Take(request.length);
+            var data = request.data.OrderBy(x => x.Created).Skip(request.start).Take(request.length);
             return Json(new
             {
                 // this is what datatables wants sending back

@@ -18,5 +18,7 @@ namespace IIRS.DAL
         public string Password { get; set; }
         public string FullName { get; set; }
         public string Mobile { get; set; }
+        public Nullable<int> DesignationId { get; set; }
+        public System.DateTime Created { get; set; }
     }
 }

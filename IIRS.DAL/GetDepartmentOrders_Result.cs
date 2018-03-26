@@ -20,5 +20,8 @@ namespace IIRS.DAL
         public int UserId { get; set; }
         public string FullName { get; set; }
         public string Mobile { get; set; }
+        public bool IsActive { get; set; }
+        public Nullable<System.DateTime> RecievedDate { get; set; }
+        public Nullable<System.DateTime> SendToDepartmentDate { get; set; }
     }
 }

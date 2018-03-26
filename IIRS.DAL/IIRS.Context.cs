@@ -33,8 +33,8 @@ namespace IIRS.DAL
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<UserInRole> UserInRoles { get; set; }
         public virtual DbSet<Comment> Comments { get; set; }
-        public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
     
         public virtual ObjectResult<GetCustomer_Result> GetCustomer(string name)
         {
@@ -76,11 +76,6 @@ namespace IIRS.DAL
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_GetOrders_Result>("SP_GetOrders", userIdParameter);
         }
     
-        public virtual ObjectResult<GetAdminOrders_Result> GetAdminOrders()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetAdminOrders_Result>("GetAdminOrders");
-        }
-    
         public virtual ObjectResult<GetDepartmentOrders_Result> GetDepartmentOrders(Nullable<int> departmentUserId)
         {
             var departmentUserIdParameter = departmentUserId.HasValue ?
@@ -101,6 +96,15 @@ namespace IIRS.DAL
                 new ObjectParameter("OrderId", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_GetComments_Result>("SP_GetComments", userIdParameter, orderIdParameter);
+        }
+    
+        public virtual ObjectResult<GetAdminOrders_Result> GetAdminOrders(string search)
+        {
+            var searchParameter = search != null ?
+                new ObjectParameter("Search", search) :
+                new ObjectParameter("Search", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetAdminOrders_Result>("GetAdminOrders", searchParameter);
         }
     }
 }

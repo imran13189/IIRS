@@ -17,6 +17,5 @@ namespace IIRS.DAL
         public string FileName { get; set; }
         public string Description { get; set; }
         public int UserId { get; set; }
-        public bool IsSend { get; set; }
     }
 }

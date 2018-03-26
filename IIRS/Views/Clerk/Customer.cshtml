@@ -185,22 +185,22 @@
                     "searchPlaceholder": "Search..."
                 },
                 "columns": [
-                     { "data": "FileName" },
-                     {
-                         "data": "UserId", "render": function (data, type, row) {
-                             //ShowFiles(row.UserId);
-                             $("#FileId").val(row.FileId);
-                             if (row.IsSend) {
-                                 return '<a  class="btn btn-danger btn-xs">In process</a>';
-                             }
-                             else
-                             {
+                     { "data": "FileName" }
+                     //{
+                     //    "data": "UserId", "render": function (data, type, row) {
+                     //        //ShowFiles(row.UserId);
+                     //        $("#FileId").val(row.FileId);
+                     //        if (row.IsSend) {
+                     //            return '<a  class="btn btn-danger btn-xs">In process</a>';
+                     //        }
+                     //        else
+                     //        {
                              
-                                 return '<a href="#"  onclick="ShowOrderModal(' + row.FileId + ')" class="btn btn-primary btn-xs" >Send to admin</a>';
+                     //            return '<a href="#"  onclick="ShowOrderModal(' + row.FileId + ')" class="btn btn-primary btn-xs" >Send to admin</a>';
                                  
-                             }
-                         }
-                     }
+                     //        }
+                     //    }
+                     //}
 
                 ],
 
@@ -225,9 +225,9 @@
             data: { Comment: $("#txtDescription").val(), ApplicantUserId: $("#UserId").val() },
             async:false,
             success: function (resultdata) {
-                tablefile.ajax.reload();
+                //tablefile.ajax.reload();
                 $("#orderModal").modal("hide");
-                $.connection.notificationHub.server.send();
+                //$.connection.notificationHub.server.send();
             }
         });
         debugger;

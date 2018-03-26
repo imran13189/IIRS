@@ -48,6 +48,8 @@
           <Property Name="Created" Type="datetime" Nullable="false" />
           <Property Name="DepartmentUserId" Type="int" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="RecievedDate" Type="datetime" />
+          <Property Name="SendToDepartmentDate" Type="datetime" />
         </EntityType>
         <EntityType Name="Roles">
           <Key>
@@ -163,7 +165,9 @@
         <Function Name="GetAdminFiles" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Search" Type="varchar" Mode="In" />
         </Function>
-        <Function Name="GetAdminOrders" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetAdminOrders" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Search" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="GetCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Name" Type="varchar" Mode="In" />
         </Function>
@@ -251,7 +255,6 @@
             <End Role="UserInRole" EntitySet="UserInRoles" />
           </AssociationSet>
           <EntitySet Name="Comments" EntityType="IIRSModel.Comment" />
-          <FunctionImport Name="GetAdminOrders" ReturnType="Collection(IIRSModel.GetAdminOrders_Result)" />
           <FunctionImport Name="GetDepartmentOrders" ReturnType="Collection(IIRSModel.GetDepartmentOrders_Result)">
           <Parameter Name="DepartmentUserId" Mode="In" Type="Int32" />
           </FunctionImport>
@@ -259,12 +262,7 @@
             <Parameter Name="UserId" Mode="In" Type="Int32" />
             <Parameter Name="OrderId" Mode="In" Type="Int32" />
           </FunctionImport>
-          <EntitySet Name="Orders" EntityType="IIRSModel.Order" />
           <EntitySet Name="Users" EntityType="IIRSModel.User" />
-          <AssociationSet Name="FK_Comments_Orders" Association="IIRSModel.FK_Comments_Orders">
-            <End Role="Order" EntitySet="Orders" />
-            <End Role="Comment" EntitySet="Comments" />
-          </AssociationSet>
           <AssociationSet Name="FK_Users_Designation" Association="IIRSModel.FK_Users_Designation">
             <End Role="Designation" EntitySet="Designations" />
             <End Role="User" EntitySet="Users" />
@@ -273,13 +271,21 @@
             <End Role="User" EntitySet="Users" />
             <End Role="File" EntitySet="Files" />
           </AssociationSet>
-          <AssociationSet Name="FK_Orders_Users" Association="IIRSModel.FK_Orders_Users">
-            <End Role="User" EntitySet="Users" />
-            <End Role="Order" EntitySet="Orders" />
-          </AssociationSet>
           <AssociationSet Name="FK_UserInRole_Users" Association="IIRSModel.FK_UserInRole_Users">
             <End Role="User" EntitySet="Users" />
             <End Role="UserInRole" EntitySet="UserInRoles" />
+          </AssociationSet>
+          <FunctionImport Name="GetAdminOrders" ReturnType="Collection(IIRSModel.GetAdminOrders_Result)">
+          <Parameter Name="Search" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="Orders" EntityType="IIRSModel.Order" />
+          <AssociationSet Name="FK_Comments_Orders" Association="IIRSModel.FK_Comments_Orders">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="Comment" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Users" Association="IIRSModel.FK_Orders_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Order" EntitySet="Orders" />
           </AssociationSet>
           </EntityContainer>
         <ComplexType Name="GetCustomer_Result">
@@ -288,13 +294,14 @@
           <Property Type="String" Name="Password" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="FullName" Nullable="true" MaxLength="255" />
           <Property Type="String" Name="Mobile" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="DesignationId" Nullable="true" />
+          <Property Type="DateTime" Name="Created" Nullable="false" Precision="23" />
         </ComplexType>
         <ComplexType Name="GetAdminFiles_Result">
           <Property Type="Int64" Name="FileId" Nullable="false" />
           <Property Type="String" Name="FileName" Nullable="false" MaxLength="100" />
           <Property Type="String" Name="Description" Nullable="true" MaxLength="50" />
           <Property Type="Int32" Name="UserId" Nullable="false" />
-          <Property Type="Boolean" Name="IsSend" Nullable="false" />
         </ComplexType>
         <ComplexType Name="GetFiles_Result">
           <Property Type="Int64" Name="FileId" Nullable="false" />
@@ -303,17 +310,19 @@
           <Property Type="Int32" Name="UserId" Nullable="false" />
         </ComplexType>
         <ComplexType Name="SP_GetOrders_Result">
-          <Property Type="Int64" Name="OrderId" Nullable="false" />
-          <Property Type="Int32" Name="UserId" Nullable="false" />
-          <Property Type="String" Name="OrderDesc" Nullable="false" />
+          <Property Type="Int32" Name="OrderId" Nullable="false" />
+          <Property Type="Int32" Name="ApplicantUserId" Nullable="false" />
           <Property Type="DateTime" Name="Created" Nullable="false" Precision="23" />
-          <Property Type="Int32" Name="DesignationId" Nullable="true" />
-          <Property Type="Int32" Name="UserId1" Nullable="false" />
+          <Property Type="Int32" Name="DepartmentUserId" Nullable="true" />
+          <Property Type="Boolean" Name="IsActive" Nullable="false" />
+          <Property Type="DateTime" Name="RecievedDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="SendToDepartmentDate" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="UserId" Nullable="false" />
           <Property Type="String" Name="Username" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="Password" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="FullName" Nullable="true" MaxLength="255" />
           <Property Type="String" Name="Mobile" Nullable="true" MaxLength="10" />
-          <Property Type="Int32" Name="DesignationId1" Nullable="true" />
+          <Property Type="Int32" Name="DesignationId" Nullable="true" />
           <Property Type="DateTime" Name="Created1" Nullable="false" Precision="23" />
         </ComplexType>
         <EntityType Name="Department">
@@ -397,19 +406,6 @@
           <Property Name="OrderId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Order" Relationship="IIRSModel.FK_Comments_Orders" FromRole="Comment" ToRole="Order" />
         </EntityType>
-        <ComplexType Name="GetAdminOrders_Result">
-          <Property Type="Int32" Name="OrderId" Nullable="false" />
-          <Property Type="Int32" Name="ApplicantUserId" Nullable="false" />
-          <Property Type="DateTime" Name="Created" Nullable="false" Precision="23" />
-          <Property Type="Int32" Name="DepartmentUserId" Nullable="true" />
-          <Property Type="Int32" Name="UserId" Nullable="false" />
-          <Property Type="String" Name="Username" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Password" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="FullName" Nullable="true" MaxLength="255" />
-          <Property Type="String" Name="Mobile" Nullable="true" MaxLength="10" />
-          <Property Type="Int32" Name="DesignationId" Nullable="true" />
-          <Property Type="DateTime" Name="Created1" Nullable="false" Precision="23" />
-        </ComplexType>
         <ComplexType Name="GetDepartmentOrders_Result">
           <Property Type="Int32" Name="OrderId" Nullable="false" />
           <Property Type="Int32" Name="ApplicantUserId" Nullable="false" />
@@ -418,6 +414,9 @@
           <Property Type="Int32" Name="UserId" Nullable="false" />
           <Property Type="String" Name="FullName" Nullable="true" MaxLength="255" />
           <Property Type="String" Name="Mobile" Nullable="true" MaxLength="10" />
+          <Property Type="Boolean" Name="IsActive" Nullable="false" />
+          <Property Type="DateTime" Name="RecievedDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="SendToDepartmentDate" Nullable="true" Precision="23" />
           </ComplexType>
         <ComplexType Name="SP_GetComments_Result">
           <Property Type="Int64" Name="CommentId" Nullable="false" />
@@ -427,18 +426,6 @@
           <Property Type="Int32" Name="OrderId" Nullable="false" />
           <Property Type="String" Name="FullName" Nullable="true" MaxLength="255" />
         </ComplexType>
-        <EntityType Name="Order">
-          <Key>
-            <PropertyRef Name="OrderId" />
-          </Key>
-          <Property Name="OrderId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ApplicantUserId" Type="Int32" Nullable="false" />
-          <Property Name="Created" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DepartmentUserId" Type="Int32" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Comments" Relationship="IIRSModel.FK_Comments_Orders" FromRole="Order" ToRole="Comment" />
-          <NavigationProperty Name="User" Relationship="IIRSModel.FK_Orders_Users" FromRole="Order" ToRole="User" />
-        </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="UserId" />
@@ -452,21 +439,9 @@
           <Property Name="Created" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Designation" Relationship="IIRSModel.FK_Users_Designation" FromRole="User" ToRole="Designation" />
           <NavigationProperty Name="Files" Relationship="IIRSModel.FK_File_Users" FromRole="User" ToRole="File" />
-          <NavigationProperty Name="Orders" Relationship="IIRSModel.FK_Orders_Users" FromRole="User" ToRole="Order" />
           <NavigationProperty Name="UserInRoles" Relationship="IIRSModel.FK_UserInRole_Users" FromRole="User" ToRole="UserInRole" />
+          <NavigationProperty Name="Orders" Relationship="IIRSModel.FK_Orders_Users" FromRole="User" ToRole="Order" />
         </EntityType>
-        <Association Name="FK_Comments_Orders">
-          <End Type="IIRSModel.Order" Role="Order" Multiplicity="1" />
-          <End Type="IIRSModel.Comment" Role="Comment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Order">
-              <PropertyRef Name="OrderId" />
-            </Principal>
-            <Dependent Role="Comment">
-              <PropertyRef Name="OrderId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Users_Designation">
           <End Type="IIRSModel.Designation" Role="Designation" Multiplicity="0..1" />
           <End Type="IIRSModel.User" Role="User" Multiplicity="*" />
@@ -491,18 +466,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Orders_Users">
-          <End Type="IIRSModel.User" Role="User" Multiplicity="1" />
-          <End Type="IIRSModel.Order" Role="Order" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="UserId" />
-            </Principal>
-            <Dependent Role="Order">
-              <PropertyRef Name="ApplicantUserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_UserInRole_Users">
           <End Type="IIRSModel.User" Role="User" Multiplicity="0..1" />
           <End Type="IIRSModel.UserInRole" Role="UserInRole" Multiplicity="*" />
@@ -512,6 +475,56 @@
             </Principal>
             <Dependent Role="UserInRole">
               <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="GetAdminOrders_Result">
+          <Property Type="Int32" Name="OrderId" Nullable="false" />
+          <Property Type="Int32" Name="ApplicantUserId" Nullable="false" />
+          <Property Type="DateTime" Name="Created" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="DepartmentUserId" Nullable="true" />
+          <Property Type="Boolean" Name="IsActive" Nullable="false" />
+          <Property Type="Int32" Name="UserId" Nullable="false" />
+          <Property Type="String" Name="FullName" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="Mobile" Nullable="true" MaxLength="10" />
+          <Property Type="DateTime" Name="RecievedDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="SendToDepartmentDate" Nullable="true" Precision="23" />
+        </ComplexType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ApplicantUserId" Type="Int32" Nullable="false" />
+          <Property Name="Created" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DepartmentUserId" Type="Int32" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="RecievedDate" Type="DateTime" Precision="3" />
+          <Property Name="SendToDepartmentDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Comments" Relationship="IIRSModel.FK_Comments_Orders" FromRole="Order" ToRole="Comment" />
+          <NavigationProperty Name="User" Relationship="IIRSModel.FK_Orders_Users" FromRole="Order" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Comments_Orders">
+          <End Type="IIRSModel.Order" Role="Order" Multiplicity="1" />
+          <End Type="IIRSModel.Comment" Role="Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="OrderId" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Users">
+          <End Type="IIRSModel.User" Role="User" Multiplicity="1" />
+          <End Type="IIRSModel.Order" Role="Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="ApplicantUserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -529,6 +542,8 @@
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="FullName" ColumnName="FullName" />
                 <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="DesignationId" ColumnName="DesignationId" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -539,7 +554,6 @@
                 <ScalarProperty Name="FileName" ColumnName="FileName" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="IsSend" ColumnName="IsSend" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -557,16 +571,18 @@
             <ResultMapping>
               <ComplexTypeMapping TypeName="IIRSModel.SP_GetOrders_Result">
                 <ScalarProperty Name="OrderId" ColumnName="OrderId" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="OrderDesc" ColumnName="OrderDesc" />
+                <ScalarProperty Name="ApplicantUserId" ColumnName="ApplicantUserId" />
                 <ScalarProperty Name="Created" ColumnName="Created" />
-                <ScalarProperty Name="DesignationId" ColumnName="DesignationId" />
-                <ScalarProperty Name="UserId1" ColumnName="UserId1" />
+                <ScalarProperty Name="DepartmentUserId" ColumnName="DepartmentUserId" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="RecievedDate" ColumnName="RecievedDate" />
+                <ScalarProperty Name="SendToDepartmentDate" ColumnName="SendToDepartmentDate" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="FullName" ColumnName="FullName" />
                 <ScalarProperty Name="Mobile" ColumnName="Mobile" />
-                <ScalarProperty Name="DesignationId1" ColumnName="DesignationId1" />
+                <ScalarProperty Name="DesignationId" ColumnName="DesignationId" />
                 <ScalarProperty Name="Created1" ColumnName="Created1" />
               </ComplexTypeMapping>
             </ResultMapping>
@@ -626,23 +642,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="GetAdminOrders" FunctionName="IIRSModel.Store.GetAdminOrders">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="IIRSModel.GetAdminOrders_Result">
-                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
-                <ScalarProperty Name="ApplicantUserId" ColumnName="ApplicantUserId" />
-                <ScalarProperty Name="Created" ColumnName="Created" />
-                <ScalarProperty Name="DepartmentUserId" ColumnName="DepartmentUserId" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="Username" ColumnName="Username" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="FullName" ColumnName="FullName" />
-                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
-                <ScalarProperty Name="DesignationId" ColumnName="DesignationId" />
-                <ScalarProperty Name="Created1" ColumnName="Created1" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GetDepartmentOrders" FunctionName="IIRSModel.Store.GetDepartmentOrders">
             <ResultMapping>
               <ComplexTypeMapping TypeName="IIRSModel.GetDepartmentOrders_Result">
@@ -653,6 +652,9 @@
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="FullName" ColumnName="FullName" />
                 <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="RecievedDate" ColumnName="RecievedDate" />
+                <ScalarProperty Name="SendToDepartmentDate" ColumnName="SendToDepartmentDate" />
                 </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -668,17 +670,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="Orders">
-            <EntityTypeMapping TypeName="IIRSModel.Order">
-              <MappingFragment StoreEntitySet="Orders">
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="DepartmentUserId" ColumnName="DepartmentUserId" />
-                <ScalarProperty Name="Created" ColumnName="Created" />
-                <ScalarProperty Name="ApplicantUserId" ColumnName="ApplicantUserId" />
-                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="IIRSModel.User">
               <MappingFragment StoreEntitySet="Users">
@@ -689,6 +680,35 @@
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetAdminOrders" FunctionName="IIRSModel.Store.GetAdminOrders">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IIRSModel.GetAdminOrders_Result">
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="ApplicantUserId" ColumnName="ApplicantUserId" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="DepartmentUserId" ColumnName="DepartmentUserId" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="RecievedDate" ColumnName="RecievedDate" />
+                <ScalarProperty Name="SendToDepartmentDate" ColumnName="SendToDepartmentDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="IIRSModel.Order">
+              <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="SendToDepartmentDate" ColumnName="SendToDepartmentDate" />
+                <ScalarProperty Name="RecievedDate" ColumnName="RecievedDate" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="DepartmentUserId" ColumnName="DepartmentUserId" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="ApplicantUserId" ColumnName="ApplicantUserId" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

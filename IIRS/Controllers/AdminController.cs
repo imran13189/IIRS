@@ -10,7 +10,7 @@ using IIRS.Core.Model;
 using IIRS.Common;
 namespace IIRS.Controllers
 {
-    //[AdminFilter]
+    [AdminFilter]
     public class AdminController : Controller
     {
         // GET: Admin

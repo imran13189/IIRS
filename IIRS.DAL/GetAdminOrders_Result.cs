@@ -17,12 +17,11 @@ namespace IIRS.DAL
         public int ApplicantUserId { get; set; }
         public System.DateTime Created { get; set; }
         public Nullable<int> DepartmentUserId { get; set; }
+        public bool IsActive { get; set; }
         public int UserId { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
         public string FullName { get; set; }
         public string Mobile { get; set; }
-        public Nullable<int> DesignationId { get; set; }
-        public System.DateTime Created1 { get; set; }
+        public Nullable<System.DateTime> RecievedDate { get; set; }
+        public Nullable<System.DateTime> SendToDepartmentDate { get; set; }
     }
 }

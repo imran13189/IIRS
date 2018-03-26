@@ -18,12 +18,13 @@ namespace IIRS.Controllers
         {
             return View();
         }
-        //public ActionResult Login()
-        //{
-        //    return View();
-        //}
-        //[HttpPost]
-        public ActionResult Login(string Username= "imran@sipaz.in", string Password= "123456")
+        public ActionResult Login()
+        {
+            return View();
+        }
+        [HttpPost]
+        //public ActionResult Login(string Username= "imran@sipaz.in", string Password= "123456")
+        public ActionResult Login(string Username , string Password )
         {
             UserRepository _repo = new UserRepository();
             LoggedInUserDetails data = _repo.GetLoginDetails(Username, Password);

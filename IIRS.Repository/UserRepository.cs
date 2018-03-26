@@ -18,6 +18,7 @@ namespace IIRS.Repository
                 userDetails.UserID = user.UserId;
                 userDetails.Username = user.Username;
                 userDetails.userInRole = user.UserInRoles.ToList();
+                userDetails.Name = user.FullName;
                 return userDetails;
             }
             else
@@ -45,7 +46,7 @@ namespace IIRS.Repository
             user.Created = DateTime.UtcNow;
             _db.Users.Add(user);
        
-            _db.UserInRoles.Add(new UserInRole() { RoleId = 3, UserId = user.UserId });
+            _db.UserInRoles.Add(new UserInRole() { RoleId = 4, UserId = user.UserId });
             _db.SaveChanges();
             return false;
 

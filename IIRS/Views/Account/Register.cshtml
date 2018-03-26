@@ -40,7 +40,7 @@
                 <p>Enter your personal details below</p>
                 <input type="text" class="form-control" name="Fullname" required placeholder="Full Name" autofocus>
                 <input type="text" class="form-control" name="Username" required placeholder="Email" autofocus>
-                @Html.DropDownList("DepartmentId", new SelectList((IEnumerable<IIRS.DAL.Department>)ViewBag.Department, "DepartmentId", "DepartmentName", "Select"), "----Select Department----", new { @class = "form-control", @required = true })
+                @Html.DropDownList("DepartmentId", new SelectList((IEnumerable<IIRS.DAL.Department>)ViewBag.Department, "DepartmentId", "DepartmentName", "Select"), "----Select Department----", new { @class = "form-control", @required = true }) &nbsp;
                 @Html.DropDownListFor(model=>model.DesignationId,new SelectList((IEnumerable<IIRS.DAL.Designation>)ViewBag.Desig,"DesignationId", "DesignationName","Select"),"----Select Designation---",new {@class= "form-control", @required=true })
                 
                 

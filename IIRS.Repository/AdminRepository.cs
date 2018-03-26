@@ -72,5 +72,10 @@ namespace IIRS.Repository
             _db.SaveChanges();
             return true;
         }
+
+        public List<GetAdminOrders_Result> GetAdminOrders(string Search)
+        {
+           return _db.GetAdminOrders(Search).ToList();
+        }
     }
 }

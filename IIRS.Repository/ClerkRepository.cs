@@ -16,11 +16,15 @@ namespace IIRS.Repository
             {
                 user.Password = "123";
                 user.Username = user.Mobile;
+                user.Created = DateTime.UtcNow;
                 _db.Users.Add(user);
                 _db.UserInRoles.Add(new UserInRole() { RoleId = 3,UserId=user.UserId});
                 _db.SaveChanges();
             }
-            catch { };
+            catch(Exception e)
+            {
+
+            }
         }
 
         public List<GetCustomer_Result> GetCustomer(string search)
@@ -55,7 +59,6 @@ namespace IIRS.Repository
         public bool SendOrder(OrderModel order)
         {
             Order orderDetails = _db.Orders.FirstOrDefault(x => x.ApplicantUserId == order.ApplicantUserId);
-           
             if (orderDetails==null)
             {
                 orderDetails = new Order();
